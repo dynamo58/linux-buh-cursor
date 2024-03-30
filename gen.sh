@@ -18,7 +18,7 @@ gen_cursor_cfg_file() {
 gen_cursor_cfg_file > buh.cursor
 
 # all the different cursor faces to be generated
-cursor_faces() {
+cursor_faces_other_than_default() {
     echo alias
     echo all-scroll
     echo arrow
@@ -33,7 +33,6 @@ cursor_faces() {
     echo cross
     echo cross_reverse
     echo crosshair
-    echo default
     echo diamond_cross
     echo e-resize
     echo ew-resize
@@ -82,11 +81,14 @@ cursor_faces() {
 
 # prepare the frames
 cd cursors/
+find . -delete
+
 unzip -j ../buh_frames.zip -d .
+xcursorgen ../buh.cursor default
 
 # let xcursorgen do its magic
-cursor_faces | while read -r word; do
-    xcursorgen ../buh.cursor "$word"
+cursor_faces_other_than_default | while read -r word; do
+    ln -s default $word
 done
 
 # clean up
